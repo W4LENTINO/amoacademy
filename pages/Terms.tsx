@@ -1,14 +1,11 @@
-
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO.tsx';
 
 const Terms: React.FC = () => {
   return (
     <div className="bg-[#fdfdfd] min-h-screen py-24">
-      <Helmet>
-        <title>Termos de Uso | Academia AMOFARMA</title>
-      </Helmet>
+      <SEO title="Termos de Uso" description="Condições gerais de utilização da plataforma académica AMOFARMA." />
 
       <div className="max-w-4xl mx-auto px-6 animate-reveal">
         <header className="text-center mb-20">

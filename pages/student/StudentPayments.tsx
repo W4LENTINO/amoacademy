@@ -1,15 +1,15 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
-import { useStudentData } from '../../hooks/useStudentData';
-import { StudentSidebar } from '../../components/student/StudentSidebar';
-import { StudentHeader } from '../../components/student/StudentHeader';
-import { PaymentCard } from '../../components/student/PaymentCard';
+import { useStudentData } from '../../hooks/useStudentData.ts';
+import { StudentSidebar } from '../../components/student/StudentSidebar.tsx';
+import { StudentHeader } from '../../components/student/StudentHeader.tsx';
+import { PaymentCard } from '../../components/student/PaymentCard.tsx';
+import SEO from '../../components/SEO.tsx';
 
 const StudentPayments: React.FC = () => {
   const { pagamentos, estatisticas, loading } = useStudentData();
   return (
     <>
-      <Helmet><title>Histórico de Pagamentos | Academia AMOFARMA</title></Helmet>
+      <SEO title="Histórico de Pagamentos" />
       <div className="min-h-screen bg-slate-50 flex">
         <StudentSidebar />
         <div className="flex-1">
@@ -32,7 +32,6 @@ const StudentPayments: React.FC = () => {
               ) : (
                 <div className="divide-y divide-slate-50">
                   {pagamentos.map(p => <PaymentCard key={p.id} payment={p} />)}
-                  {pagamentos.length === 0 && <div className="p-20 text-center text-slate-300 italic uppercase font-black text-[10px] tracking-widest">Sem movimentos registados.</div>}
                 </div>
               )}
             </div>

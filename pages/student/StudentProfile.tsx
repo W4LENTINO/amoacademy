@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { useAuth } from '../../hooks/useAuth';
-import { StudentSidebar } from '../../components/student/StudentSidebar';
-import { StudentHeader } from '../../components/student/StudentHeader';
-import { alunosService } from '../../services/alunosService';
+import { useAuth } from '../../hooks/useAuth.ts';
+import { StudentSidebar } from '../../components/student/StudentSidebar.tsx';
+import { StudentHeader } from '../../components/student/StudentHeader.tsx';
+import { alunosService } from '../../services/alunosService.ts';
+import SEO from '../../components/SEO.tsx';
 
 const StudentProfile: React.FC = () => {
   const { user, profile, refreshProfile } = useAuth();
@@ -30,7 +30,7 @@ const StudentProfile: React.FC = () => {
 
   return (
     <>
-      <Helmet><title>Meu Perfil | Academia AMOFARMA</title></Helmet>
+      <SEO title="Meu Perfil" />
       <div className="min-h-screen bg-slate-50 flex">
         <StudentSidebar />
         <div className="flex-1">
@@ -53,14 +53,6 @@ const StudentProfile: React.FC = () => {
                    <div className="space-y-2">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Contacto WhatsApp</label>
                       <input type="tel" value={formData.telefone} onChange={e => setFormData({...formData, telefone: e.target.value})} className="w-full bg-slate-50 border-b-2 border-slate-50 p-5 focus:border-[#1a1a3a] outline-none transition font-bold" />
-                   </div>
-                   <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Profissão / Área</label>
-                      <input type="text" value={formData.profissao} onChange={e => setFormData({...formData, profissao: e.target.value})} className="w-full bg-slate-50 border-b-2 border-slate-50 p-5 focus:border-[#1a1a3a] outline-none transition font-bold" />
-                   </div>
-                   <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Data Nascimento</label>
-                      <input type="date" value={formData.data_nascimento} onChange={e => setFormData({...formData, data_nascimento: e.target.value})} className="w-full bg-slate-50 border-b-2 border-slate-50 p-5 focus:border-[#1a1a3a] outline-none transition font-bold" />
                    </div>
                 </div>
                 <button disabled={loading} className="w-full bg-[#1a1a3a] hover:bg-[#e84c5c] text-white py-6 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-2xl disabled:opacity-50">

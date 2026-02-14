@@ -1,15 +1,15 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
-import { useStudentData } from '../../hooks/useStudentData';
-import { StudentSidebar } from '../../components/student/StudentSidebar';
-import { StudentHeader } from '../../components/student/StudentHeader';
-import { CourseProgress } from '../../components/student/CourseProgress';
+import { useStudentData } from '../../hooks/useStudentData.ts';
+import { StudentSidebar } from '../../components/student/StudentSidebar.tsx';
+import { StudentHeader } from '../../components/student/StudentHeader.tsx';
+import { CourseProgress } from '../../components/student/CourseProgress.tsx';
+import SEO from '../../components/SEO.tsx';
 
 const StudentCourses: React.FC = () => {
   const { cursosInscritos, loading } = useStudentData();
   return (
     <>
-      <Helmet><title>Meus Programas | Academia AMOFARMA</title></Helmet>
+      <SEO title="Meus Programas" />
       <div className="min-h-screen bg-slate-50 flex">
         <StudentSidebar />
         <div className="flex-1">
