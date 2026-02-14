@@ -68,6 +68,15 @@ const Register: React.FC = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
 
+  const mapErrorMessage = (error: string): string => {
+    const lowerError = error.toLowerCase();
+    if (lowerError.includes('user already registered')) return 'Este e-mail já se encontra registado no nosso arquivo digital.';
+    if (lowerError.includes('password should be at least')) return 'A senha deve conter no mínimo 8 caracteres para garantir a integridade da conta.';
+    if (lowerError.includes('invalid bi') || lowerError.includes('bi format')) return 'O formato do Bilhete de Identidade é inválido para o protocolo angolano.';
+    if (lowerError.includes('network') || lowerError.includes('fetch')) return 'Falha na comunicação com o servidor central. Verifique a sua ligação.';
+    return 'Ocorreu um erro inesperado no protocolo de registo. Por favor, tente novamente.';
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -77,19 +86,25 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
     if (!captchaVerified) {
-      setError('Por favor, complete a verificação de segurança.');
+      setError('A validação humana (Captcha) é obrigatória para prosseguir.');
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('As senhas introduzidas não são idênticas. Por favor, verifique a confirmação.');
+      return;
+    }
+
+    const biRegex = /^[0-9]{9}[A-Z]{2}[0-9]{3}$/;
+    if (!biRegex.test(formData.numero_bi.toUpperCase().replace(/\s/g, ''))) {
+      setError('O número de BI fornecido não cumpre o padrão institucional (Ex: 001234567LA045).');
       return;
     }
 
     setLoading(true);
-    setError(null);
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('As senhas não coincidem');
-      setLoading(false);
-      return;
-    }
 
     const safeData = {
       nome_completo: sanitizeInput(formData.nome_completo),
@@ -106,7 +121,8 @@ const Register: React.FC = () => {
       await auditLogger.log({ tipo: 'login_sucesso', email: safeData.email, detalhes: { acao: 'registo_novo_utilizador' } });
       navigate('/verificar-email-enviado');
     } else {
-      setError(result.error || 'Erro ao criar conta');
+      const specificError = mapErrorMessage(result.error || '');
+      setError(specificError);
       await auditLogger.logSecurityAlert({ tipo: 'login_falha', email: safeData.email, detalhes: { erro: result.error, contexto: 'registo' } });
     }
 
@@ -122,8 +138,12 @@ const Register: React.FC = () => {
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-100 text-red-600 p-5 rounded-2xl text-[10px] font-black uppercase mb-8 tracking-widest text-center">
-            {error}
+          <div className="bg-red-50 border border-red-100 text-red-600 p-6 rounded-2xl mb-8 flex items-start gap-4 animate-reveal">
+            <span className="text-xl mt-0.5">⚠️</span>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest mb-1">Inconformidade Detetada</p>
+              <p className="text-xs font-bold leading-relaxed">{error}</p>
+            </div>
           </div>
         )}
 
@@ -166,7 +186,7 @@ const Register: React.FC = () => {
               value={formData.numero_bi}
               onChange={handleChange}
               className="w-full bg-slate-50 border border-slate-100 px-8 py-5 rounded-2xl focus:border-[#e84c5c] outline-none transition-all font-bold text-[#1a1a3a]"
-              placeholder="001234567LA045"
+              placeholder="Ex: 001234567LA045"
               required
               disabled={loading}
               {...secureInputProps}
@@ -219,7 +239,7 @@ const Register: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Confirmar</label>
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Confirmar Chave</label>
             <input
               type="password"
               name="confirmPassword"
@@ -234,23 +254,23 @@ const Register: React.FC = () => {
           </div>
 
           <div className="md:col-span-2 pt-4">
-            <SimpleCaptcha onVerify={() => setCaptchaVerified(true)} />
+            <SimpleCaptcha onVerify={() => setCaptchaVerified(true)} onExpire={() => setCaptchaVerified(false)} />
           </div>
 
           <div className="md:col-span-2">
             <button
               type="submit"
-              disabled={loading || !captchaVerified}
-              className="w-full bg-[#1a1a3a] hover:bg-[#e84c5c] text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] transition-all shadow-2xl shadow-[#1a1a3a]/20 disabled:opacity-50"
+              disabled={loading}
+              className="w-full bg-[#1a1a3a] hover:bg-[#e84c5c] text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] transition-all shadow-2xl shadow-[#1a1a3a]/20 disabled:opacity-50 transform active:scale-[0.98]"
             >
-              {loading ? 'A criar conta...' : 'Finalizar Registo Académico'}
+              {loading ? 'AUDITANDO CREDENCIAIS...' : 'FINALIZAR REGISTO ACADÉMICO'}
             </button>
           </div>
         </form>
 
         <div className="mt-12 text-center">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-            Já tem conta? <Link to="/login" className="text-[#e84c5c] hover:underline">Fazer Login</Link>
+            Já possui acesso? <Link to="/login" className="text-[#e84c5c] hover:underline">Autenticar no Portal</Link>
           </p>
         </div>
       </div>
