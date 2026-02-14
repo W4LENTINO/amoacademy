@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMOFARMA | Academia de Farmácia de Angola</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+    
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.22.0?external=react,react-dom",
+    "react-helmet": "https://esm.sh/react-helmet@6.1.0?external=react,react-dom",
+    "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react,react-dom",
+    "@google/genai": "https://esm.sh/@google/genai@0.21.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.7",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.1",
+    "qrcode": "https://esm.sh/qrcode@1.5.3",
+    "axios": "https://esm.sh/axios@1.6.7",
+    "framer-motion": "https://esm.sh/framer-motion@11.0.8?external=react,react-dom",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
+
+    <style>
+        :root {
+            --primary: #1a1a3a;
+            --accent: #e84c5c;
+            --bg: #f8fafc;
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: #0f172a;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, .font-prestige { font-family: 'Playfair Display', serif; }
+        
+        .shadow-premium { box-shadow: 0 20px 50px -12px rgba(26, 26, 58, 0.15); }
+        
+        .animate-reveal { 
+            animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+            opacity: 0; 
+        }
+        @keyframes reveal { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        #root { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        .admin-scrollbar::-webkit-scrollbar { width: 4px; }
+        .student-scrollbar::-webkit-scrollbar { width: 4px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
+</body>
+</html>
