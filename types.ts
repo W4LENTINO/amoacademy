@@ -1,9 +1,9 @@
 export enum UserRole {
-  ALUNO = 'ALUNO',
-  ADMIN = 'ADMIN',
-  SUPER_ADMIN = 'SUPER_ADMIN',
-  EDITOR = 'EDITOR',
-  VIEWER = 'VIEWER'
+  ALUNO = 'aluno',
+  ADMIN = 'admin',
+  SUPER_ADMIN = 'super_admin',
+  EDITOR = 'editor',
+  VIEWER = 'visualizador'
 }
 
 export interface User {
@@ -27,9 +27,9 @@ export interface Course {
   price: number;
   instructor: string;
   startDate: string;
-  endDate: string;
+  endDate?: string;
   image: string;
-  status: 'active' | 'inactive';
+  status: 'active' | 'inactive' | 'rascunho';
   learningOutcomes: string[];
   category: string;
   hours: number;
@@ -48,23 +48,6 @@ export interface Certificate {
   status: 'VALID' | 'INVALID';
 }
 
-export interface Enrollment {
-  id: string;
-  date: string;
-  studentName: string;
-  studentEmail: string;
-  courseName: string;
-  status: 'pending' | 'confirmed' | 'cancelled';
-}
-
-export interface AdminNotification {
-  id: string;
-  type: 'critical' | 'warning' | 'info' | 'success';
-  message: string;
-  timestamp: string;
-  read: boolean;
-}
-
 export interface BlogPost {
   id: string;
   title: string;
@@ -79,5 +62,21 @@ export interface BlogPost {
   featured?: boolean;
   views?: number;
   slug?: string;
-  publishDate?: string;
+}
+
+export interface Enrollment {
+  id: string;
+  date: string;
+  studentName: string;
+  studentEmail: string;
+  courseName: string;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'concluida';
+}
+
+export interface AdminNotification {
+  id: string;
+  type: 'critical' | 'warning' | 'info' | 'success';
+  message: string;
+  timestamp: string;
+  read: boolean;
 }

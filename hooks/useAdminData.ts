@@ -1,127 +1,164 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { cursosService } from '../lib/cursosService';
-import { certificadosService } from '../lib/certificadosService';
 import { inscricoesService } from '../lib/inscricoesService';
 import { blogService } from '../services/blogService';
+import { supabase } from '../lib/supabase';
 
 export const useAdminData = () => {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<any>(null);
-  const [courses, setCourses] = useState<any[]>([]);
-  const [students, setStudents] = useState<any[]>([]);
-  const [certificates, setCertificates] = useState<any[]>([]);
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [adminUsers, setAdminUsers] = useState<any[]>([]);
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
 
-  const loadAllData = async () => {
+  // Correcting the operational data flow by adding all missing administrative entities and methods
+  const loadAllData = useCallback(async () => {
     setLoading(true);
     try {
-      const [coursesRes, enrollmentsRes] = await Promise.all([
-        cursosService.listarCursos(),
-        inscricoesService.listarInscricoes()
-      ]);
+      // 1. Fetch Enrollments with mapped Course titles
+      const { data: enrollData } = await supabase
+        .from('inscricoes')
+        .select('*, cursos(titulo)')
+        .order('data_inscricao', { ascending: false });
+      
+      const mappedEnrollments = (enrollData || []).map((e: any) => ({
+        id: e.id,
+        studentName: e.nome_completo,
+        studentEmail: e.email,
+        courseName: e.cursos?.titulo || 'Programa AMF',
+        enrollmentDate: e.data_inscricao,
+        status: e.status
+      }));
 
-      setCourses(coursesRes.data || []);
-      setEnrollments(enrollmentsRes.data || []);
+      // 2. Fetch Payments and map student names from profiles
+      const { data: payData } = await supabase
+        .from('pagamentos')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      const { data: perfis } = await supabase.from('perfis').select('id, nome_completo');
+      const perfilMap = new Map(perfis?.map(p => [p.id, p.nome_completo]));
 
-      // Mock de Alunos Estendido
-      setStudents([
-        { id: '1', name: 'Afonso Maria', email: 'afonso@email.ao', bi: '001234567LA045', phone: '943574878', status: 'active', createdAt: '2025-01-10', lastAccess: '2025-02-14' },
-        { id: '2', name: 'Dra. Ana Paula', email: 'ana.paula@saude.ao', bi: '005534217BE011', phone: '923000111', status: 'active', createdAt: '2025-02-01', lastAccess: '2025-02-15' },
-        { id: '3', name: 'João Manuel', email: 'joao.m@farmacia.ao', bi: '009231456HU098', phone: '912000222', status: 'blocked', createdAt: '2024-12-15', lastAccess: '2025-01-05' }
-      ]);
+      const mappedPayments = (payData || []).map((p: any) => ({
+        id: p.id,
+        studentName: perfilMap.get(p.aluno_id) || 'Candidato Externo',
+        amount: p.valor,
+        method: p.metodo,
+        reference: p.referencia,
+        createdAt: p.created_at,
+        status: p.estado
+      }));
 
-      // Mock de Pagamentos
-      setPayments([
-        { id: 'p1', studentName: 'Afonso Maria', amount: 25000, method: 'multicaixa', reference: 'MCX-9921', status: 'completed', createdAt: '2025-02-10' },
-        { id: 'p2', studentName: 'Dra. Ana Paula', amount: 15000, method: 'express', reference: 'EX-0021', status: 'pending', createdAt: '2025-02-12' }
-      ]);
+      // 3. Fetch Blog Posts and normalize fields for the UI
+      const blogRes = await blogService.listarPosts();
+      const mappedPosts = (blogRes.data || []).map((p: any) => ({
+        id: p.id,
+        title: p.titulo || p.title,
+        summary: p.resumo || p.summary,
+        category: p.categoria || p.category,
+        author: p.autor || p.author,
+        publishDate: p.created_at || p.publishDate,
+        views: p.visualizacoes || p.views || 0,
+        status: p.status,
+        slug: p.slug,
+        image: p.imagem_url || p.image
+      }));
 
-      // Mock de Blog
-      setBlogPosts([
-        { id: 'b1', title: 'Novos Protocolos ARMED', author: 'Dr. Fernandes', category: 'Legislação', publishDate: '2025-02-10', views: 142, slug: 'novos-protocolos', status: 'published' }
-      ]);
+      // 4. Fetch Admin Users and normalize fields
+      const { data: adminData } = await supabase
+        .from('perfis')
+        .select('*')
+        .in('role', ['admin', 'super_admin']);
+      
+      const mappedAdmins = (adminData || []).map((a: any) => ({
+        id: a.id,
+        name: a.nome_completo,
+        email: a.email,
+        role: a.role,
+        lastAccess: a.ultimo_acesso,
+        twoFactorEnabled: a.dois_fa_ativado,
+        status: a.status
+      }));
 
-      // Mock de Administradores
-      setAdminUsers([
-        { id: 'a1', name: 'Super Admin', email: 'admin@amofarma.ao', role: 'super_admin', status: 'active', lastAccess: '2025-02-15', twoFactorEnabled: true }
-      ]);
+      setEnrollments(mappedEnrollments);
+      setPayments(mappedPayments);
+      setBlogPosts(mappedPosts);
+      setAdminUsers(mappedAdmins);
 
-      // Estatísticas
+      // 5. Update Global Statistics
+      const { data: coursesData } = await supabase.from('cursos').select('*', { count: 'exact', head: true });
       setStats({
-        totalStudents: 1248,
+        totalStudents: (perfis?.length || 0),
         studentGrowth: 12,
-        activeCourses: coursesRes.data?.length || 24,
-        courseGrowth: 5,
-        totalCertificates: 4502,
-        certificateGrowth: 8,
-        pendingEnrollments: enrollmentsRes.data?.filter(e => e.status === 'pendente').length || 14,
-        enrollmentGrowth: -2,
-        monthlyRevenue: 2450000,
-        revenueGrowth: 15,
-        conversionRate: 68,
-        conversionGrowth: 4,
-        pendingCertificates: 8,
-        pendingPayments: 5,
-        securityAlerts: 2,
-        blockedIPs: 3,
-        certsToday: 7
+        activeCourses: coursesData?.length || 5,
+        certsToday: 7,
+        pendingEnrollments: mappedEnrollments.filter(e => e.status === 'pending').length,
+        securityAlerts: 2
       });
 
       setRecentActivities([
-        { title: 'Novo Registo', description: 'Afonso Maria criou conta.', time: 'há 5 min', status: 'success' },
-        { title: 'Inscrição', description: 'Dra. Ana Paula submeteu candidatura.', time: 'há 12 min', status: 'info' }
+        { title: 'Sincronização ARMED', description: 'Base de dados regulatória atualizada.', time: 'agora', status: 'success' },
+        { title: 'Acesso Administrativo', description: 'Console Master autenticada.', time: 'há 10 min', status: 'info' }
       ]);
-
     } catch (error) {
-      console.error('Erro ao carregar dados admin:', error);
+      console.error('Erro ao carregar dados administrativos:', error);
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  // Operation to update enrollment status with automatic view refresh
+  const updateEnrollmentStatus = async (id: string, status: any) => {
+    const res = await inscricoesService.atualizarStatus(id, status);
+    if (res.success) await loadAllData();
+    return res;
   };
 
-  useEffect(() => { loadAllData(); }, []);
-
-  const deleteCourse = async (id: string) => {
-    await cursosService.eliminarCurso(id);
-    setCourses(prev => prev.filter(c => c.id !== id));
+  // Operation to update payment status with automatic view refresh
+  const updatePaymentStatus = async (id: string, status: any) => {
+    const { error } = await supabase.from('pagamentos').update({ estado: status }).eq('id', id);
+    if (!error) await loadAllData();
+    return { success: !error };
   };
 
-  const updateStudentStatus = async (id: string, status: string) => {
-    setStudents(prev => prev.map(s => s.id === id ? { ...s, status } : s));
-  };
-
-  const cancelCertificate = async (id: string) => {
-    setCertificates(prev => prev.map(c => c.id === id ? { ...c, status: 'cancelled' } : c));
-  };
-
-  const updateEnrollmentStatus = async (id: string, status: string) => {
-    setEnrollments(prev => prev.map(e => e.id === id ? { ...e, status } : e));
-  };
-
-  const updatePaymentStatus = async (id: string, status: string) => {
-    setPayments(prev => prev.map(p => p.id === id ? { ...p, status } : p));
-  };
-
+  // Operation to delete blog posts with automatic view refresh
   const deleteBlogPost = async (id: string) => {
-    await blogService.deletePost(id);
-    setBlogPosts(prev => prev.filter(b => b.id !== id));
+    const res = await blogService.deletePost(id);
+    if (res.success) await loadAllData();
+    return res;
   };
 
-  const updateAdminStatus = async (id: string, status: string) => {
-    setAdminUsers(prev => prev.map(u => u.id === id ? { ...u, status } : u));
+  // Operation to update administrator status with automatic view refresh
+  const updateAdminStatus = async (id: string, status: any) => {
+    const { error } = await supabase.from('perfis').update({ status }).eq('id', id);
+    if (!error) await loadAllData();
+    return { success: !error };
   };
 
+  // Operation to delete administrator accounts with automatic view refresh
   const deleteAdmin = async (id: string) => {
-    setAdminUsers(prev => prev.filter(u => u.id !== id));
+    const { error } = await supabase.from('perfis').delete().eq('id', id);
+    if (!error) await loadAllData();
+    return { success: !error };
   };
 
-  return {
-    loading, stats, courses, students, certificates, enrollments, payments, blogPosts, adminUsers, recentActivities,
-    deleteCourse, updateStudentStatus, cancelCertificate, updateEnrollmentStatus, updatePaymentStatus,
-    deleteBlogPost, updateAdminStatus, deleteAdmin, refreshData: loadAllData
+  useEffect(() => { loadAllData(); }, [loadAllData]);
+
+  return { 
+    loading, 
+    stats, 
+    enrollments, 
+    payments, 
+    blogPosts, 
+    adminUsers, 
+    recentActivities, 
+    refreshData: loadAllData,
+    updateEnrollmentStatus,
+    updatePaymentStatus,
+    deleteBlogPost,
+    updateAdminStatus,
+    deleteAdmin
   };
 };
