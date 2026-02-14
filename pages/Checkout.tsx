@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-import { useCoursePayment } from '../hooks/usePayment';
-import { PaymentMethodSelector } from '../components/payments/PaymentMethodSelector';
-import { PaymentSummary } from '../components/payments/PaymentSummary';
-import { MulticaixaForm } from '../components/payments/MulticaixaForm';
-import { ExpressForm } from '../components/payments/ExpressForm';
-import { BankTransferForm } from '../components/payments/BankTransferForm';
+import { useCoursePayment } from '../hooks/usePayment.ts';
+import { PaymentMethodSelector } from '../components/payments/PaymentMethodSelector.tsx';
+import { PaymentSummary } from '../components/payments/PaymentSummary.tsx';
+import { MulticaixaForm } from '../components/payments/MulticaixaForm.tsx';
+import { ExpressForm } from '../components/payments/ExpressForm.tsx';
+import { BankTransferForm } from '../components/payments/BankTransferForm.tsx';
+import SEO from '../components/SEO.tsx';
 
 const Checkout: React.FC = () => {
   const { courseId } = useParams();
@@ -14,7 +14,6 @@ const Checkout: React.FC = () => {
   const [step, setStep] = useState<'method' | 'summary' | 'instructions'>('method');
   const [method, setMethod] = useState<any>(null);
 
-  // Simulação de dados do curso (em produção viria de um hook useCourse)
   const course = { id: courseId, title: 'Programa de Especialização', price: 25000 };
 
   const { initiatePayment, paymentData, loading } = useCoursePayment({
@@ -36,7 +35,7 @@ const Checkout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 py-24 px-6">
-      <Helmet><title>Checkout Seguro | Academia AMOFARMA</title></Helmet>
+      <SEO title="Checkout Seguro" />
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16 animate-reveal">
            <div className="w-16 h-16 bg-[#e84c5c] rounded-2xl flex items-center justify-center text-white font-black text-2xl mx-auto mb-8 shadow-xl">AMF</div>
@@ -46,11 +45,7 @@ const Checkout: React.FC = () => {
 
         <div className="space-y-12">
           {step === 'method' && (
-            <PaymentMethodSelector 
-              selectedMethod={method} 
-              onSelect={handleSelectMethod} 
-              amount={course.price} 
-            />
+            <PaymentMethodSelector selectedMethod={method} onSelect={handleSelectMethod} amount={course.price} />
           )}
 
           {step === 'summary' && (

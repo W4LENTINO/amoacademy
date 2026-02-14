@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.tsx';
 import { FiMenu, FiX } from 'react-icons/fi';
 
 const Navbar: React.FC = () => {
@@ -15,9 +15,7 @@ const Navbar: React.FC = () => {
   const navigation = [
     { name: 'Início', path: '/' },
     { name: 'Programas', path: '/cursos' },
-    { name: 'Insights', path: '/blog' },
     { name: 'Validar', path: '/validar' },
-    { name: 'FAQ', path: '/faq' }
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -46,61 +44,28 @@ const Navbar: React.FC = () => {
                 }`}
               >
                 {item.name}
-                <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-[#e84c5c] transition-transform duration-300 origin-left ${isActive(item.path) ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
               </Link>
             ))}
             
-            <div className="w-px h-6 bg-slate-200"></div>
-
             {isAuthenticated ? (
               <div className="flex items-center space-x-6">
-                <Link to="/area-do-aluno" className="text-xs font-black text-[#1a1a3a] hover:text-[#e84c5c] transition-colors uppercase tracking-widest">
+                <Link to="/area-do-aluno" className="text-xs font-black text-[#1a1a3a] uppercase tracking-widest">
                   {profile?.nome_completo.split(' ')[0]}
                 </Link>
-                <button onClick={logout} className="text-xs font-black text-slate-400 hover:text-red-500 transition-colors uppercase tracking-widest cursor-pointer">
-                  Sair
-                </button>
+                <button onClick={logout} className="text-xs font-black text-slate-400 uppercase tracking-widest cursor-pointer">Sair</button>
               </div>
             ) : (
-              <Link to="/login" className="bg-[#1a1a3a] hover:bg-[#e84c5c] text-white px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-md active:scale-95">
+              <Link to="/login" className="bg-[#1a1a3a] hover:bg-[#e84c5c] text-white px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all">
                 Entrar
               </Link>
             )}
           </div>
 
           <div className="lg:hidden">
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-[#1a1a3a] p-2 focus:outline-none"
-            >
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-[#1a1a3a] p-2">
               {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
           </div>
-        </div>
-      </div>
-
-      <div 
-        className={`lg:hidden fixed inset-0 top-20 bg-slate-900/20 backdrop-blur-sm transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        onClick={() => setIsMobileMenuOpen(false)}
-      ></div>
-
-      <div 
-        className={`lg:hidden absolute top-20 left-0 w-full bg-white border-t border-slate-100 shadow-2xl transition-all duration-500 ease-in-out transform ${
-          isMobileMenuOpen ? 'translate-y-0 opacity-100 visible' : '-translate-y-4 opacity-0 invisible'
-        }`}
-      >
-        <div className="p-6 space-y-2">
-          {navigation.map((item) => (
-            <Link 
-              key={item.name} 
-              to={item.path} 
-              className={`block px-6 py-4 rounded-2xl text-sm font-black uppercase tracking-widest transition-all ${
-                isActive(item.path) ? 'bg-[#e84c5c]/10 text-[#e84c5c] shadow-sm' : 'text-[#1a1a3a] hover:bg-slate-50'
-              }`}
-            >
-              {item.name}
-            </Link>
-          ))}
         </div>
       </div>
     </nav>

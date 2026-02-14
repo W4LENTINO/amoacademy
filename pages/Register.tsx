@@ -1,9 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useSecurity } from '../hooks/useSecurity';
-import { SimpleCaptcha } from '../components/Captcha';
-import { auditLogger } from '../lib/auditLogger';
+import { useAuth } from '../contexts/AuthContext.tsx';
+import { useSecurity } from '../hooks/useSecurity.ts';
+import { SimpleCaptcha } from '../components/Captcha.tsx';
+import { auditLogger } from '../lib/auditLogger.ts';
+
+// Sub-componente de Força de Senha
+const PasswordStrength: React.FC<{ password: string }> = ({ password }) => {
+  const strength = useMemo(() => {
+    if (!password) return 0;
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    return score;
+  }, [password]);
+
+  const config = [
+    { label: 'Vulnerável', color: 'bg-slate-200', text: 'text-slate-400' },
+    { label: 'Fraca', color: 'bg-[#e84c5c]', text: 'text-[#e84c5c]' },
+    { label: 'Média', color: 'bg-amber-400', text: 'text-amber-500' },
+    { label: 'Forte', color: 'bg-emerald-500', text: 'text-emerald-600' },
+    { label: 'Excelente', color: 'bg-[#1a1a3a]', text: 'text-[#1a1a3a]' },
+  ];
+
+  const current = config[Math.min(strength, 4)];
+
+  if (!password) return null;
+
+  return (
+    <div className="mt-4 space-y-2 animate-reveal">
+      <div className="flex justify-between items-center mb-1">
+        <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Segurança da Chave</span>
+        <span className={`text-[9px] font-black uppercase tracking-widest ${current.text}`}>{current.label}</span>
+      </div>
+      <div className="flex gap-1.5 h-1.5">
+        {[1, 2, 3, 4].map((step) => (
+          <div 
+            key={step} 
+            className={`flex-1 rounded-full transition-all duration-500 ${
+              step <= Math.min(strength, 4) ? current.color : 'bg-slate-100'
+            }`} 
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const Register: React.FC = () => {
   const { sanitizeInput, secureInputProps } = useSecurity();
@@ -46,7 +91,6 @@ const Register: React.FC = () => {
       return;
     }
 
-    // Sanitização antes do envio
     const safeData = {
       nome_completo: sanitizeInput(formData.nome_completo),
       email: formData.email.trim().toLowerCase(),
@@ -171,6 +215,7 @@ const Register: React.FC = () => {
               minLength={8}
               {...secureInputProps}
             />
+            <PasswordStrength password={formData.password} />
           </div>
 
           <div className="space-y-2">
@@ -189,7 +234,6 @@ const Register: React.FC = () => {
           </div>
 
           <div className="md:col-span-2 pt-4">
-            {/* Fix: onVerify prop expects a function that takes a string token, so we wrap setCaptchaVerified */}
             <SimpleCaptcha onVerify={() => setCaptchaVerified(true)} />
           </div>
 

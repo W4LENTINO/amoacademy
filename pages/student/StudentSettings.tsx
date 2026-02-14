@@ -1,12 +1,12 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
-import { StudentSidebar } from '../../components/student/StudentSidebar';
-import { StudentHeader } from '../../components/student/StudentHeader';
+import { StudentSidebar } from '../../components/student/StudentSidebar.tsx';
+import { StudentHeader } from '../../components/student/StudentHeader.tsx';
+import SEO from '../../components/SEO.tsx';
 
 const StudentSettings: React.FC = () => {
   return (
     <>
-      <Helmet><title>Ajustes de Conta | Academia AMOFARMA</title></Helmet>
+      <SEO title="Ajustes de Conta" />
       <div className="min-h-screen bg-slate-50 flex">
         <StudentSidebar />
         <div className="flex-1">

@@ -24,7 +24,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ user, onLogout, children, not
     { path: '/acesso-a7f9k2/certificados', label: 'DIPLOMAS', icon: <FiFileText /> },
     { path: '/acesso-a7f9k2/pagamentos', label: 'FINANÇAS', icon: <FiDollarSign /> },
     { path: '/acesso-a7f9k2/seguranca', label: 'SEGURANÇA', icon: <FiShield /> },
-    { path: '/acesso-a7f9k2/relatorios', label: <HiOutlineChartBar />, label_txt: 'RELATÓRIOS' },
+    { path: '/acesso-a7f9k2/relatorios', label: 'RELATÓRIOS', icon: <HiOutlineChartBar /> },
     { path: '/acesso-a7f9k2/configuracoes', label: 'SISTEMA', icon: <FiSettings /> },
   ];
 
@@ -36,7 +36,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ user, onLogout, children, not
           {isSidebarOpen && <span className="ml-4 font-black text-lg tracking-tighter uppercase opacity-90">Console Master</span>}
         </div>
         
-        <nav className="flex-1 overflow-y-auto py-8 space-y-1 admin-scrollbar">
+        <nav className="flex-1 overflow-y-auto py-8 space-y-1 student-scrollbar">
           {menuItems.map((item) => (
             <Link
               key={item.path}
@@ -47,8 +47,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ user, onLogout, children, not
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <span className="text-xl group-hover:scale-110 transition-transform">{item.icon || item.label}</span>
-              {isSidebarOpen && <span className="ml-4 font-bold text-[10px] tracking-[0.2em] uppercase">{item.label_txt || item.label}</span>}
+              <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
+              {isSidebarOpen && <span className="ml-4 font-bold text-[10px] tracking-[0.2em] uppercase">{item.label}</span>}
             </Link>
           ))}
         </nav>

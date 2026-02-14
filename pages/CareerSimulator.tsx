@@ -14,14 +14,16 @@ const CareerSimulator: React.FC = () => {
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: [{ role: 'user', parts: [{ text: `Como consultor estratégico da Academia AMOFARMA em Angola, forneça um roteiro académico formal para o seguinte objetivo de carreira: ${goal}. Destaque cursos como Farmacovigilância, Gestão Hospitalar e Legislação Farmacêutica Angolana. Use um tom institucional de extremo prestígio, mencionando o rigor da ARMED e a excelência científica da AMOFARMA.` }] }],
+        model: 'gemini-3-pro-preview',
+        contents: `Como consultor estratégico da Academia AMOFARMA em Angola, forneça um roteiro académico formal para o seguinte objetivo de carreira: ${goal}. Destaque cursos como Farmacovigilância, Gestão Hospitalar e Legislação Farmacêutica Angolana. Use um tom institucional de extremo prestígio, mencionando o rigor da ARMED e a excelência científica da AMOFARMA. O roteiro deve ser estruturado e profissional.`,
       });
-      
+
+      // Acesso correto à propriedade .text (não invocar como função)
       const text = response.text || 'Não foi possível estabelecer um roteiro neste momento.';
       setSuggestion(text);
     } catch (error) {
-      setSuggestion('Ocorreu uma interrupção no protocolo de simulação. Por favor, tente novamente.');
+      console.error('Simulator Error:', error);
+      setSuggestion('Ocorreu uma interrupção no protocolo de simulação estratégica. Por favor, tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -59,7 +61,7 @@ const CareerSimulator: React.FC = () => {
                     value={goal}
                     onChange={(e) => setGoal(e.target.value)}
                     placeholder="Ex: Almejo a Direção Técnica de uma unidade hospitalar central em Luanda..."
-                    className="w-full bg-slate-50 border-none p-8 text-xl font-light italic focus:ring-2 focus:ring-[#e84c5c] outline-none transition-all h-60 resize-none rounded-2xl"
+                    className="w-full bg-slate-50 border-none p-8 text-xl font-light italic focus:ring-2 focus:ring-[#e84c5c] outline-none transition-all h-60 resize-none rounded-2xl shadow-inner"
                   />
                 </div>
                 <button 

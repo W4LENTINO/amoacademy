@@ -10,25 +10,24 @@
     <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "react-router-dom": "https://esm.sh/react-router-dom@7.1.0?external=react,react-dom",
-    "react-icons": "https://esm.sh/react-icons@5.4.0?external=react",
-    "react-icons/fi": "https://esm.sh/react-icons@5.4.0/fi?external=react",
-    "react-icons/bi": "https://esm.sh/react-icons@5.4.0/bi?external=react",
-    "react-icons/hi": "https://esm.sh/react-icons@5.4.0/hi?external=react",
-    "@google/genai": "https://esm.sh/@google/genai@0.1.0",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.48.0",
-    "jspdf": "https://esm.sh/jspdf@2.5.2",
-    "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.4",
-    "qrcode": "https://esm.sh/qrcode@1.5.4",
-    "axios": "https://esm.sh/axios@1.7.9",
-    "framer-motion": "https://esm.sh/framer-motion@12.0.0?external=react,react-dom",
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.22.3?external=react,react-dom",
+    "react-icons": "https://esm.sh/react-icons@5.0.1?external=react",
+    "react-icons/fi": "https://esm.sh/react-icons@5.0.1/fi?external=react",
+    "react-icons/bi": "https://esm.sh/react-icons@5.0.1/bi?external=react",
+    "react-icons/hi": "https://esm.sh/react-icons@5.0.1/hi?external=react",
+    "@google/genai": "https://esm.sh/@google/genai@0.15.1",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.7",
+    "framer-motion": "https://esm.sh/framer-motion@11.0.8?external=react,react-dom",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.2",
+    "qrcode": "https://esm.sh/qrcode@1.5.3",
+    "axios": "https://esm.sh/axios@1.6.7",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/",
-    "react-icons/": "https://esm.sh/react-icons@^5.5.0/",
-    "react-helmet": "https://esm.sh/react-helmet@^6.1.0"
+    "react-icons/": "https://esm.sh/react-icons@^5.5.0/"
   }
 }
 </script>
@@ -37,16 +36,31 @@
         :root { --primary: #1a1a3a; --accent: #e84c5c; --bg: #f8fafc; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #0f172a; margin: 0; padding: 0; overflow-x: hidden; }
         h1, h2, h3, .font-prestige { font-family: 'Playfair Display', serif; }
-        .shadow-premium { box-shadow: 0 20px 50px -12px rgba(26, 26, 58, 0.15); }
         #root { min-height: 100vh; display: flex; flex-direction: column; }
+        .shadow-premium { box-shadow: 0 20px 50px -12px rgba(26, 26, 58, 0.15); }
         .animate-reveal { animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
         @keyframes reveal { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
         .student-scrollbar::-webkit-scrollbar { width: 4px; }
-        .student-scrollbar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        .student-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .student-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+
+        .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+        .btn-elite { 
+            position: relative; overflow: hidden; transition: all 0.3s ease; 
+            background: var(--primary); color: white; border-radius: 12px;
+            font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+        }
+        .btn-elite:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(232, 76, 92, 0.3); }
     </style>
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="index.tsx"></script>
+    <script>
+        // Garantir que process.env existe sem sobrescrever variáveis injetadas
+        window.process = window.process || { env: {} };
+        window.process.env = { ...window.process.env, NODE_ENV: 'production' };
+    </script>
+    <script type="module" src="./index.tsx"></script>
 </body>
 </html>

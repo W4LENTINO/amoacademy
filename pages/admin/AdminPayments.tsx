@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { AdminSidebar } from '../../components/admin/AdminSidebar';
 import { AdminHeader } from '../../components/admin/AdminHeader';
 import { DataTable } from '../../components/admin/DataTable';
@@ -7,6 +6,7 @@ import { StatusBadge } from '../../components/admin/StatusBadge';
 import { ActionButtons } from '../../components/admin/ActionButtons';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
 import { useAdminData } from '../../hooks/useAdminData';
+import SEO from '../../components/SEO';
 
 const AdminPayments: React.FC = () => {
   const { payments, loading, updatePaymentStatus } = useAdminData();
@@ -94,9 +94,7 @@ const AdminPayments: React.FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Gestão de Pagamentos | Painel Admin - AMOFARMA</title>
-      </Helmet>
+      <SEO title="Gestão de Pagamentos" />
 
       <div className="min-h-screen bg-slate-50 flex">
         <AdminSidebar />
@@ -166,7 +164,6 @@ const AdminPayments: React.FC = () => {
         message="Tem certeza que deseja confirmar este pagamento? O aluno receberá uma notificação."
         confirmText="Confirmar Pagamento"
         cancelText="Cancelar"
-        /* Fix: Type 'success' replaced with 'info' to match ConfirmDialogProps definition */
         type="info"
       />
     </>

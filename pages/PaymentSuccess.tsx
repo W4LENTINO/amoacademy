@@ -1,13 +1,13 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
+import SEO from '../components/SEO.tsx';
 
 const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <>
-      <Helmet><title>Inscrição Confirmada | Academia AMOFARMA</title></Helmet>
+      <SEO title="Inscrição Confirmada" />
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
         <div className="max-w-md w-full bg-white rounded-[3rem] p-12 shadow-premium text-center border border-slate-100 animate-reveal">
           <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-8">

@@ -1,124 +1,65 @@
-import React, { useState } from 'react';
-import { useSecurity } from '../hooks/useSecurity';
-import { SimpleCaptcha } from '../components/Captcha';
+import React from 'react';
+import { ContactForm } from '../components/ContactForm.tsx';
+import SEO from '../components/SEO.tsx';
+import { FiMail, FiPhone, FiMapPin, FiClock } from 'react-icons/fi';
 
 const Contact: React.FC = () => {
-  const { sanitizeInput, secureInputProps } = useSecurity();
-  const [formData, setFormData] = useState({ nome: '', email: '', mensagem: '' });
-  const [captchaVerified, setCaptchaVerified] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!captchaVerified) return;
-
-    setSending(true);
-    // Simulação de envio com dados sanitizados
-    const safeData = {
-      nome: sanitizeInput(formData.nome),
-      email: formData.email.trim().toLowerCase(),
-      mensagem: sanitizeInput(formData.mensagem)
-    };
-    
-    console.log('Solicitação enviada:', safeData);
-    
-    setTimeout(() => {
-      setSending(false);
-      setSuccess(true);
-      setFormData({ nome: '', email: '', mensagem: '' });
-      setCaptchaVerified(false);
-    }, 1500);
-  };
+  const contactInfo = [
+    { icon: <FiMail />, title: 'Secretaria Digital', detail: 'cursos@amofarma.ao', sub: 'Resposta em até 24h úteis' },
+    { icon: <FiPhone />, title: 'Linha Directa', detail: '+244 943 574 878', sub: 'Atendimento: 08:00 - 17:00' },
+    { icon: <FiMapPin />, title: 'Sede Institucional', detail: 'Av. Pedro Castro Van-Dunem Loy', sub: 'Luanda, Angola' },
+    { icon: <FiClock />, title: 'Rigor Académico', detail: 'Conselho Técnico', sub: 'Auditoria de Processos' },
+  ];
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="py-24 bg-[#064e3b] text-center px-6">
-        <h1 className="text-5xl font-prestige font-black text-white uppercase tracking-tighter">Canais Institucionais</h1>
-        <p className="text-slate-400 text-xs font-black uppercase tracking-[0.4em] mt-6">Apoio ao Aluno e Parcerias Corporativas</p>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 -mt-16 grid grid-cols-1 lg:grid-cols-12 gap-12 pb-32">
-        <div className="lg:col-span-8 bg-white shadow-premium p-12 md:p-20 border border-slate-50 relative">
-          <div className="absolute top-0 left-0 w-1.5 h-full bg-red-700"></div>
-          <h2 className="text-2xl font-prestige font-bold text-slate-900 uppercase mb-12 tracking-tight">Envie sua Consulta</h2>
-          
-          {success ? (
-            <div className="bg-emerald-50 border border-emerald-100 p-10 rounded-2xl text-center animate-reveal">
-               <span className="text-4xl mb-4 block">✉️</span>
-               <h3 className="text-emerald-900 font-bold uppercase text-sm tracking-widest">Solicitação Encaminhada</h3>
-               <p className="text-emerald-600 text-xs mt-2 font-medium">Nossa equipa técnica responderá ao seu email corporativo em breve.</p>
-               <button onClick={() => setSuccess(false)} className="mt-8 text-[9px] font-black uppercase tracking-widest text-emerald-800 border-b border-emerald-200 pb-1">Nova Mensagem</button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-4">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nome Completo</label>
-                <input 
-                  type="text" 
-                  required
-                  value={formData.nome}
-                  onChange={(e) => setFormData({...formData, nome: e.target.value})}
-                  className="w-full bg-slate-50 border-b border-slate-200 p-4 focus:border-[#064e3b] outline-none transition font-bold" 
-                  {...secureInputProps}
-                />
-              </div>
-              <div className="space-y-4">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">E-mail Corporativo</label>
-                <input 
-                  type="email" 
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full bg-slate-50 border-b border-slate-200 p-4 focus:border-[#064e3b] outline-none transition font-bold" 
-                  {...secureInputProps}
-                />
-              </div>
-              <div className="md:col-span-2 space-y-4">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mensagem Académica</label>
-                <textarea 
-                  required
-                  value={formData.mensagem}
-                  onChange={(e) => setFormData({...formData, mensagem: e.target.value})}
-                  className="w-full bg-slate-50 border-b border-slate-200 p-4 focus:border-[#064e3b] outline-none transition font-bold h-40 resize-none" 
-                  {...secureInputProps}
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                {/* Fix: onVerify prop expects a function that takes a string token, so we wrap setCaptchaVerified */}
-                <SimpleCaptcha onVerify={() => setCaptchaVerified(true)} />
-              </div>
-
-              <button 
-                type="submit"
-                disabled={sending || !captchaVerified}
-                className="md:col-span-2 bg-[#064e3b] text-white py-6 font-black text-[10px] uppercase tracking-[0.4em] hover:bg-black transition-all disabled:opacity-50"
-              >
-                {sending ? 'A ENVIAR...' : 'Encaminhar Solicitação'}
-              </button>
-            </form>
-          )}
+      <SEO title="Contactos Oficiais" description="Entre em contacto com a Direção Académica da Academia AMOFARMA em Luanda." />
+      
+      {/* Hero Section */}
+      <section className="bg-[#1a1a3a] text-white py-24 px-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#e84c5c] rounded-full blur-[150px] opacity-10 translate-x-1/2 -translate-y-1/2"></div>
+        <div className="max-w-7xl mx-auto text-center relative z-10 animate-reveal">
+          <span className="text-[#e84c5c] text-[10px] font-black uppercase tracking-[0.6em] mb-6 block">Canais Institucionais</span>
+          <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter uppercase leading-none">Apoio ao <span className="text-[#e84c5c]">Profissional</span></h1>
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto italic opacity-80 leading-relaxed">
+            Nossa equipa de especialistas está preparada para oferecer suporte técnico e académico personalizado à elite farmacêutica.
+          </p>
         </div>
+      </section>
 
-        <div className="lg:col-span-4 space-y-8">
-          <div className="bg-slate-50 p-12 border border-slate-100 rounded-sm">
-            <h3 className="text-lg font-prestige font-bold text-slate-900 uppercase mb-6">Sede Central</h3>
-            <p className="text-sm text-slate-500 leading-relaxed italic mb-8">
-              Av. Pedro Castro Van-Dunem Loy,<br/>
-              Luanda, República de Angola.
-            </p>
-            <div className="aspect-square bg-slate-200 overflow-hidden shadow-inner grayscale">
-              <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Map Placeholder" />
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 -mt-16 pb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* Form Container */}
+          <div className="lg:col-span-7 bg-white rounded-[3.5rem] shadow-premium p-10 md:p-16 border border-slate-100 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-[#e84c5c]"></div>
+            <h2 className="text-3xl font-black text-[#1a1a3a] mb-12 uppercase tracking-tighter">Consulta <span className="italic text-slate-300">Técnica</span></h2>
+            <ContactForm />
+          </div>
+
+          {/* Info Side */}
+          <div className="lg:col-span-5 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+              {contactInfo.map((info, i) => (
+                <div key={i} className="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 group hover:bg-[#1a1a3a] transition-all duration-500">
+                  <div className="text-2xl text-[#e84c5c] mb-6 group-hover:scale-110 transition-transform">{info.icon}</div>
+                  <h3 className="font-black text-[#1a1a3a] uppercase tracking-widest text-[10px] mb-2 group-hover:text-white/50 transition-colors">{info.title}</h3>
+                  <p className="text-xl font-bold text-[#1a1a3a] tracking-tight group-hover:text-white transition-colors">{info.detail}</p>
+                  <p className="text-xs text-slate-400 mt-2 font-medium italic group-hover:text-white/30 transition-colors">{info.sub}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Compliance Message */}
+            <div className="bg-[#064e3b] p-10 rounded-[2.5rem] text-white/90 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+              <h4 className="font-black text-[9px] uppercase tracking-[0.4em] mb-4 text-[#e84c5c]">Aviso de Conformidade</h4>
+              <p className="text-xs leading-relaxed font-light italic">
+                "Todas as comunicações enviadas através deste canal são encriptadas e auditadas pelo Conselho de Ética da Academia AMOFARMA, em conformidade com as normas da ARMED."
+              </p>
             </div>
           </div>
-          <div className="bg-[#064e3b] p-12 text-white">
-            <h3 className="text-lg font-prestige font-bold uppercase mb-6">Atendimento</h3>
-            <div className="space-y-4 text-[11px] font-black uppercase tracking-widest text-slate-400">
-               <p className="flex justify-between"><span>Secretaria:</span> <span className="text-white">+244 943 574 878</span></p>
-               <p className="flex justify-between"><span>Direção:</span> <span className="text-white">direcao@amofarma.ao</span></p>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

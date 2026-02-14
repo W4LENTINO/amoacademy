@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { AdminSidebar } from '../../components/admin/AdminSidebar';
 import { AdminHeader } from '../../components/admin/AdminHeader';
 import { DataTable } from '../../components/admin/DataTable';
@@ -7,6 +6,7 @@ import { StatusBadge } from '../../components/admin/StatusBadge';
 import { ActionButtons } from '../../components/admin/ActionButtons';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
 import { useAdminData } from '../../hooks/useAdminData';
+import SEO from '../../components/SEO';
 
 const AdminEnrollments: React.FC = () => {
   const { enrollments, loading, updateEnrollmentStatus } = useAdminData();
@@ -113,9 +113,7 @@ const AdminEnrollments: React.FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Gestão de Inscrições | Painel Admin - AMOFARMA</title>
-      </Helmet>
+      <SEO title="Gestão de Inscrições" />
 
       <div className="min-h-screen bg-slate-50 flex">
         <AdminSidebar />
@@ -189,7 +187,6 @@ const AdminEnrollments: React.FC = () => {
         }
         confirmText={actionType === 'confirm' ? 'Confirmar' : 'Cancelar Inscrição'}
         cancelText="Voltar"
-        /* Fix: Type 'success' replaced with 'info' to match ConfirmDialogProps definition */
         type={actionType === 'confirm' ? 'info' : 'danger'}
       />
     </>

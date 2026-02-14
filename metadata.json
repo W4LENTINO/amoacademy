@@ -1,7 +1,8 @@
 {
   "requestFramePermissions": [
-    "camera"
+    "camera",
+    "microphone"
   ],
   "name": "Academia AMOFARMA",
-  "description": ""
+  "description": "Portal Institucional da Academia de Farmácia de Angola - Excelência e Rigor Académico."
 }

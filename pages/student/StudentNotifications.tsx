@@ -1,14 +1,14 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
-import { useStudentData } from '../../hooks/useStudentData';
-import { StudentSidebar } from '../../components/student/StudentSidebar';
-import { StudentHeader } from '../../components/student/StudentHeader';
+import { useStudentData } from '../../hooks/useStudentData.ts';
+import { StudentSidebar } from '../../components/student/StudentSidebar.tsx';
+import { StudentHeader } from '../../components/student/StudentHeader.tsx';
+import SEO from '../../components/SEO.tsx';
 
 const StudentNotifications: React.FC = () => {
-  const { notificacoes, refreshNotifications } = useStudentData();
+  const { notificacoes } = useStudentData();
   return (
     <>
-      <Helmet><title>Notificações | Academia AMOFARMA</title></Helmet>
+      <SEO title="Central de Mensagens" />
       <div className="min-h-screen bg-slate-50 flex">
         <StudentSidebar />
         <div className="flex-1">
