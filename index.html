@@ -28,6 +28,7 @@
     "qrcode": "https://esm.sh/qrcode@1.5.3",
     "axios": "https://esm.sh/axios@1.6.7",
     "lucide-react": "https://esm.sh/lucide-react@0.343.0?external=react",
+    "react-helmet-async": "https://esm.sh/react-helmet-async@2.0.5?external=react",
     "react-icons/": "https://esm.sh/react-icons@^5.5.0/"
   }
 }
@@ -47,19 +48,12 @@
         .student-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 
         .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
-        .btn-elite { 
-            position: relative; overflow: hidden; transition: all 0.3s ease; 
-            background: var(--primary); color: white; border-radius: 12px;
-            font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
-        }
-        .btn-elite:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(232, 76, 92, 0.3); }
     </style>
 </head>
 <body>
     <div id="root"></div>
     <script>
-        window.process = window.process || { env: {} };
-        window.process.env = { ...window.process.env, NODE_ENV: 'production' };
+        window.process = { env: { NODE_ENV: 'production' } };
     </script>
     <script type="module" src="./index.tsx"></script>
 </body>

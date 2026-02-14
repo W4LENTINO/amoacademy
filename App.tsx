@@ -70,7 +70,7 @@ const MOCK_COURSES: Course[] = [
     id: '1', 
     title: 'Farmacovigilância Avançada', 
     shortDescription: 'Técnicas modernas de monitorização de efeitos adversos em Angola.', 
-    longDescription: 'Este programa de elite aborda os protocolos internacionais da OMS aplicados ao contexto angolano. Focado no rigor regulatório e segurança do paciente.', 
+    longDescription: 'Este programa de elite aborda os protocolos internacionais da OMS aplicados ao contexto angolano.', 
     price: 25000, 
     instructor: 'Dr. Fernandes', 
     startDate: '2025-03-01',
@@ -79,7 +79,7 @@ const MOCK_COURSES: Course[] = [
     category: 'Farmácia Clínica', 
     hours: 40, 
     status: 'active', 
-    learningOutcomes: ['Monitorização de Reações Adversas', 'Legislação ARMED', 'Gestão de Crises Sanitárias']
+    learningOutcomes: ['Monitorização de Reações Adversas', 'Legislação ARMED']
   }
 ];
 
@@ -90,8 +90,7 @@ const MOCK_POSTS: BlogPost[] = [
     summary: 'Análise detalhada sobre as recentes alterações na legislação farmacêutica angolana.',
     image: 'https://images.unsplash.com/photo-1587854692152-cbe660dbbb88',
     category: 'Legislação',
-    date: '10 Fev 2025',
-    author: 'Conselho Académico'
+    date: '10 Fev 2025'
   }
 ];
 
@@ -99,68 +98,94 @@ function App() {
   const { logout, profile } = useAuth();
 
   const adminUser: User = {
-    id: profile?.id || 'default-admin',
+    id: profile?.id || 'admin-id',
     name: profile?.nome_completo || 'Administrador',
     email: profile?.email || 'admin@amofarma.ao',
-    bi: profile?.numero_bi || '000000000',
-    role: profile?.role === 'super_admin' ? UserRole.SUPER_ADMIN : UserRole.ADMIN,
+    bi: profile?.numero_bi || '000000',
+    role: UserRole.ADMIN,
     status: 'active'
   };
 
   return (
     <Router>
-      <div className="min-h-screen bg-white flex flex-col">
-        <Routes>
-          <Route path="/acesso-a7f9k2" element={<AdminLogin onLogin={() => {}} />} />
-          
-          <Route path="/acesso-a7f9k2/*" element={
-            <AdminRoute>
-              <AdminLayout user={adminUser} onLogout={logout} notifications={[]}>
-                <Routes>
-                  <Route path="dashboard" element={<AdminDashboard />} />
-                  <Route path="cursos" element={<AdminCourseList courses={MOCK_COURSES} />} />
-                  <Route path="seguranca" element={<AdminSecurity />} />
-                  <Route path="*" element={<Navigate to="dashboard" replace />} />
-                </Routes>
-              </AdminLayout>
-            </AdminRoute>
-          } />
-
-          <Route path="/area-do-aluno/*" element={
-            <ProtectedRoute>
+      <Routes>
+        <Route path="/acesso-a7f9k2" element={<AdminLogin onLogin={() => {}} />} />
+        
+        <Route path="/acesso-a7f9k2/*" element={
+          <AdminRoute>
+            <AdminLayout user={adminUser} onLogout={logout} notifications={[]}>
               <Routes>
-                <Route index element={<StudentDashboard />} />
-                <Route path="cursos" element={<StudentCourses />} />
-                <Route path="certificados" element={<StudentCertificates />} />
-                <Route path="*" element={<Navigate to="/area-do-aluno" replace />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="cursos" element={<AdminCourseList courses={MOCK_COURSES} />} />
+                <Route path="cursos/novo" element={<AdminCourseEditor />} />
+                <Route path="seguranca" element={<AdminSecurity />} />
+                <Route path="blog" element={<AdminBlog />} />
+                <Route path="blog/novo" element={<AdminBlogForm />} />
+                <Route path="alunos" element={<AdminStudentList students={[]} />} />
+                <Route path="certificados" element={<AdminCertificateManager />} />
+                <Route path="inscricoes" element={<AdminEnrollmentList enrollments={[]} />} />
+                <Route path="pagamentos" element={<AdminPayments />} />
+                <Route path="usuarios" element={<AdminUsers />} />
+                <Route path="relatorios" element={<AdminReports />} />
+                <Route path="configuracoes" element={<AdminSettings />} />
+                <Route path="*" element={<Navigate to="dashboard" replace />} />
               </Routes>
-            </ProtectedRoute>
-          } />
+            </AdminLayout>
+          </AdminRoute>
+        } />
 
-          <Route path="*" element={
-            <>
-              <Navbar />
-              <main className="flex-grow">
-                <Routes>
-                  <Route path="/" element={<Home latestCourses={MOCK_COURSES} latestPosts={MOCK_POSTS} />} />
-                  <Route path="/sobre" element={<About />} />
-                  <Route path="/contacto" element={<Contact />} />
-                  <Route path="/privacidade" element={<Privacy />} />
-                  <Route path="/cursos" element={<CourseCatalog courses={MOCK_COURSES} />} />
-                  <Route path="/validar" element={<ValidateCertificate />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/simulador" element={<CareerSimulator />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </main>
-              <Footer />
-              <WhatsAppButton />
-              <AiAssistant />
-            </>
-          } />
-        </Routes>
-      </div>
+        <Route path="/area-do-aluno/*" element={
+          <ProtectedRoute>
+            <Routes>
+              <Route index element={<StudentDashboard />} />
+              <Route path="cursos" element={<StudentCourses />} />
+              <Route path="certificados" element={<StudentCertificates />} />
+              <Route path="pagamentos" element={<StudentPayments />} />
+              <Route path="notificacoes" element={<StudentNotifications />} />
+              <Route path="perfil" element={<StudentProfile />} />
+              <Route path="configuracoes" element={<StudentSettings />} />
+            </Routes>
+          </ProtectedRoute>
+        } />
+
+        <Route path="*" element={
+          <>
+            <Navbar />
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Home latestCourses={MOCK_COURSES} />} />
+                <Route path="/sobre" element={<About />} />
+                <Route path="/contacto" element={<Contact />} />
+                <Route path="/privacidade" element={<Privacy />} />
+                <Route path="/termos" element={<Terms />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/cookies" element={<Cookies />} />
+                <Route path="/aviso-legal" element={<Disclaimer />} />
+                <Route path="/cursos" element={<CourseCatalog courses={MOCK_COURSES} />} />
+                <Route path="/cursos/:id" element={<CourseDetails courses={MOCK_COURSES} />} />
+                <Route path="/checkout/:courseId" element={<Checkout />} />
+                <Route path="/pagamento/sucesso" element={<PaymentSuccess />} />
+                <Route path="/pagamento/falha" element={<PaymentFailure />} />
+                <Route path="/blog" element={<Blog posts={MOCK_POSTS} />} />
+                <Route path="/blog/:id" element={<BlogPostDetails posts={MOCK_POSTS} />} />
+                <Route path="/validar" element={<ValidateCertificate />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/recuperar-senha" element={<ForgotPassword />} />
+                <Route path="/redefinir-senha" element={<ResetPassword />} />
+                <Route path="/verificar-email" element={<VerifyEmail />} />
+                <Route path="/verificar-email-enviado" element={<VerifyEmailSent />} />
+                <Route path="/2fa" element={<TwoFactorAuth />} />
+                <Route path="/simulador" element={<CareerSimulator />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </main>
+            <Footer />
+            <WhatsAppButton />
+            <AiAssistant />
+          </>
+        } />
+      </Routes>
     </Router>
   );
 }
