@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAdminData } from '../../hooks/useAdminData';
-import { StatusBadge } from '../../components/admin/StatusBadge';
+import { useAdminData } from '../../hooks/useAdminData.ts';
+import { StatusBadge } from '../../components/admin/StatusBadge.tsx';
+import SEO from '../../components/SEO.tsx';
 
 const AdminDashboard: React.FC = () => {
   const { stats, recentActivities, enrollments, loading } = useAdminData();
@@ -19,6 +20,8 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="space-y-12 animate-reveal">
+      <SEO title="Painel Administrativo" />
+      
       {/* Dynamic Command Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-slate-200 pb-10">
         <div>
@@ -94,7 +97,7 @@ const AdminDashboard: React.FC = () => {
         <div className="bg-white rounded-[4rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
           <div className="p-12 border-b border-slate-50 bg-slate-50/30">
             <h3 className="font-black text-[#1a1a3a] uppercase text-xl tracking-tighter">Fila de Admissão</h3>
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.4em] mt-2">Validação Curricular Pendente</p>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Validação Curricular Pendente</p>
           </div>
           <div className="flex-1 overflow-y-auto divide-y divide-slate-50 student-scrollbar">
             {enrollments.length > 0 ? enrollments.slice(0, 6).map((e) => (

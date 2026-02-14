@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Certificate } from '../types';
+import { Certificate } from '../types.ts';
 import { FiSearch, FiShield, FiCheckCircle, FiAlertTriangle } from 'react-icons/fi';
+import SEO from '../components/SEO.tsx';
 
 const ValidateCertificate: React.FC = () => {
   const [code, setCode] = useState('');
@@ -40,9 +40,7 @@ const ValidateCertificate: React.FC = () => {
 
   return (
     <div className="bg-[#f8fafc] min-h-screen py-24 px-6 lg:px-12">
-      <Helmet>
-        <title>Validar Credencial Digital | Academia AMOFARMA</title>
-      </Helmet>
+      <SEO title="Validar Credencial Digital" description="Verifique a autenticidade de certificados e diplomas emitidos pela Academia AMOFARMA." />
 
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-24 animate-reveal">

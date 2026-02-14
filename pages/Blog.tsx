@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-import { BlogPost } from '../types';
+import { BlogPost } from '../types.ts';
+import SEO from '../components/SEO.tsx';
 
 interface BlogProps {
   posts: BlogPost[];
@@ -10,11 +10,11 @@ interface BlogProps {
 const Blog: React.FC<BlogProps> = ({ posts }) => {
   return (
     <div className="bg-[#fdfdfd] min-h-screen pb-40">
-      <Helmet>
-        <title>Insights Técnicos & Blog | Academia AMOFARMA</title>
-        <meta name="description" content="Artigos técnicos, novidades da ARMED e avanços científicos na área farmacêutica em Angola. Conhecimento contínuo para profissionais de saúde." />
-        <meta name="keywords" content="blog farmacêutico angola, notícias saúde luanda, literatura científica farmácia, amofarma insights" />
-      </Helmet>
+      <SEO 
+        title="Insights Técnicos & Blog" 
+        description="Artigos técnicos, novidades da ARMED e avanços científicos na área farmacêutica em Angola."
+        keywords="blog farmacêutico angola, notícias saúde luanda"
+      />
 
       <div className="bg-[#064e3b] text-white py-32 px-6 text-center relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1.5 bg-[#e84c5c]"></div>

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
-import { AdminSidebar } from '../../components/admin/AdminSidebar';
-import { AdminHeader } from '../../components/admin/AdminHeader';
-import { DataTable } from '../../components/admin/DataTable';
-import { StatusBadge } from '../../components/admin/StatusBadge';
-import { ActionButtons } from '../../components/admin/ActionButtons';
-import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
-import { useAdminData } from '../../hooks/useAdminData';
+import { AdminHeader } from '../../components/admin/AdminHeader.tsx';
+import { DataTable } from '../../components/admin/DataTable.tsx';
+import { StatusBadge } from '../../components/admin/StatusBadge.tsx';
+import { ActionButtons } from '../../components/admin/ActionButtons.tsx';
+import { ConfirmDialog } from '../../components/admin/ConfirmDialog.tsx';
+import { useAdminData } from '../../hooks/useAdminData.ts';
+import SEO from '../../components/SEO.tsx';
 
 const AdminBlog: React.FC = () => {
   const { blogPosts, loading, deleteBlogPost } = useAdminData();
@@ -81,10 +80,7 @@ const AdminBlog: React.FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Gestão do Blog | Painel Admin - AMOFARMA</title>
-      </Helmet>
-
+      <SEO title="Gestão do Blog" />
       <div className="space-y-12 animate-reveal">
         <AdminHeader 
           title="Gestão do Blog" 

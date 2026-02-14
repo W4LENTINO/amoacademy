@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-import { Course } from '../types';
+import { Course } from '../types.ts';
+import SEO from '../components/SEO.tsx';
 
 interface CourseCatalogProps {
   courses: Course[];
@@ -17,11 +17,11 @@ const CourseCatalog: React.FC<CourseCatalogProps> = ({ courses }) => {
 
   return (
     <div className="bg-slate-50 min-h-screen pb-32">
-      <Helmet>
-        <title>Oferta Formativa | Academia AMOFARMA</title>
-        <meta name="description" content="Especializações de elite para profissionais farmacêuticos angolanos. Programas em Farmácia Clínica, Gestão Hospitalar e Legislação ARMED." />
-        <meta name="keywords" content="cursos farmácia angola, especialização farmacêutica, formação saúde luanda, pós-graduação farmácia" />
-      </Helmet>
+      <SEO 
+        title="Oferta Formativa" 
+        description="Especializações de elite para profissionais farmacêuticos angolanos. Programas em Farmácia Clínica, Gestão Hospitalar e Legislação ARMED."
+        keywords="cursos farmácia angola, especialização farmacêutica, formação saúde luanda"
+      />
 
       <div className="bg-[#1a1a3a] text-white py-24 px-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#e84c5c] rounded-full blur-[180px] opacity-10 translate-x-1/2 -translate-y-1/2"></div>

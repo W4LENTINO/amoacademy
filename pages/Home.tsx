@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Course, BlogPost } from '../types';
+import { Course, BlogPost } from '../types.ts';
+import SEO from '../components/SEO.tsx';
 
 interface HomeProps {
   latestCourses: Course[];
@@ -12,10 +12,10 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ latestCourses, latestPosts }) => {
   return (
     <div className="bg-white">
-      <Helmet>
-        <title>ACADEMIA AMOFARMA | Excelência Farmacêutica em Angola</title>
-        <meta name="description" content="Líder em formação farmacêutica de elite. Programas acreditados pela ARMED para profissionais de saúde angolanos." />
-      </Helmet>
+      <SEO 
+        title="Excelência Farmacêutica em Angola" 
+        description="Líder em formação farmacêutica de elite em Angola. Programas acreditados para profissionais de saúde."
+      />
 
       {/* Hero Section Prestige */}
       <section className="relative bg-[#1a1a3a] text-white min-h-[95vh] flex items-center overflow-hidden">
@@ -59,7 +59,29 @@ const Home: React.FC<HomeProps> = ({ latestCourses, latestPosts }) => {
           </div>
         </motion.div>
       </section>
-      {/* Rest of the component remains the same */}
+
+      {/* Seção de Cursos Recentes (Exemplo) */}
+      <section className="py-32 px-6 lg:px-12 max-w-7xl mx-auto">
+        <div className="flex justify-between items-end mb-20">
+          <div>
+            <h2 className="text-5xl font-black text-[#1a1a3a] uppercase tracking-tighter">Elite <span className="text-[#e84c5c]">Formativa</span></h2>
+            <p className="text-slate-400 font-bold uppercase tracking-[0.3em] mt-4">Últimos Programas de Especialização</p>
+          </div>
+          <Link to="/cursos" className="text-[10px] font-black uppercase tracking-widest text-[#e84c5c] border-b-2 border-[#e84c5c]/20 pb-1">Ver Catálogo Completo &rarr;</Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+           {latestCourses.map(c => (
+             <div key={c.id} className="bg-slate-50 p-10 rounded-[3rem] border border-slate-100 group hover:bg-white hover:shadow-premium transition-all">
+                <div className="h-60 overflow-hidden rounded-[2rem] mb-10 shadow-lg grayscale group-hover:grayscale-0 transition-all duration-700">
+                  <img src={c.image} className="w-full h-full object-cover" alt={c.title} />
+                </div>
+                <h3 className="text-xl font-black text-[#1a1a3a] uppercase tracking-tight mb-6 leading-tight">{c.title}</h3>
+                <p className="text-slate-500 italic mb-10 text-sm leading-relaxed">{c.shortDescription}</p>
+                <Link to={`/cursos/${c.id}`} className="bg-[#1a1a3a] text-white px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#e84c5c] transition-all block text-center">Explorar Unidade</Link>
+             </div>
+           ))}
+        </div>
+      </section>
     </div>
   );
 };

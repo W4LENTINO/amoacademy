@@ -1,13 +1,13 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { useStudentData } from '../../hooks/useStudentData';
-import { CourseProgress } from '../../components/student/CourseProgress';
-import { CertificateCard } from '../../components/student/CertificateCard';
-import { PaymentCard } from '../../components/student/PaymentCard';
-import { StudentSidebar } from '../../components/student/StudentSidebar';
-import { StudentHeader } from '../../components/student/StudentHeader';
+import { useAuth } from '../../hooks/useAuth.ts';
+import { useStudentData } from '../../hooks/useStudentData.ts';
+import { CourseProgress } from '../../components/student/CourseProgress.tsx';
+import { CertificateCard } from '../../components/student/CertificateCard.tsx';
+import { PaymentCard } from '../../components/student/PaymentCard.tsx';
+import { StudentSidebar } from '../../components/student/StudentSidebar.tsx';
+import { StudentHeader } from '../../components/student/StudentHeader.tsx';
+import SEO from '../../components/SEO.tsx';
 import '../../styles/StudentArea.css';
 
 const StudentDashboard: React.FC = () => {
@@ -27,7 +27,7 @@ const StudentDashboard: React.FC = () => {
 
   return (
     <>
-      <Helmet><title>Área do Aluno | Academia AMOFARMA</title></Helmet>
+      <SEO title="Portal do Aluno" />
       <div className="min-h-screen bg-slate-50 flex">
         <StudentSidebar />
         <div className="flex-1 flex flex-col">

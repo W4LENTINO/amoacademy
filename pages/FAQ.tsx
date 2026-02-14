@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { FAQAccordion } from '../components/FAQAccordion';
-import { faqData } from '../data/faqData';
+import { FAQAccordion } from '../components/FAQAccordion.tsx';
+import { faqData } from '../data/faqData.ts';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO.tsx';
 
 const FAQ: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('todos');
@@ -22,9 +21,7 @@ const FAQ: React.FC = () => {
 
   return (
     <div className="bg-white min-h-screen">
-      <Helmet>
-        <title>FAQ | Academia AMOFARMA</title>
-      </Helmet>
+      <SEO title="FAQ | Centro de Suporte" description="Esclareça as suas dúvidas sobre os nossos protocolos académicos e processos de certificação." />
 
       <section className="bg-[#1a1a3a] py-24 md:py-32 text-center text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#e84c5c] blur-[150px] opacity-10"></div>
